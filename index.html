@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Call</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>Video Call Room</h2>
+
+  <div>
+    <button id="toggleMic">Mute Mic</button>
+    <button id="toggleCam">Turn Off Cam</button>
+    <button id="shareLink">Copy Room Link</button>
+    <button id="screenShare">Share Screen</button>
+    <button id="startRec">Start Recording</button>
+    <button id="stopRec" disabled>Stop Recording</button>
+  </div>
+
+  <video id="localVideo" autoplay muted playsinline></video>
+  <video id="remoteVideo" autoplay playsinline></video>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
