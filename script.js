@@ -1,4 +1,6 @@
-const socket = io();
+// Connect to your Render backend WebSocket (change URL if needed)
+const socket = io('https://your-render-app-name.onrender.com'); // 👈 Replace this with your actual Render URL
+
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get('room');
 
@@ -28,6 +30,7 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
 // Join room
 socket.on('user-joined', async (remoteSocketId) => {
+  console.log('User joined:', remoteSocketId);
   peerConnection = createPeerConnection(remoteSocketId);
 
   localStream.getTracks().forEach(track => {
@@ -44,6 +47,7 @@ socket.on('user-joined', async (remoteSocketId) => {
 });
 
 socket.on('offer', async ({ sender, offer }) => {
+  console.log('Received offer from', sender);
   peerConnection = createPeerConnection(sender);
 
   localStream.getTracks().forEach(track => {
@@ -61,11 +65,14 @@ socket.on('offer', async ({ sender, offer }) => {
 });
 
 socket.on('answer', async ({ sender, answer }) => {
+  console.log('Received answer from', sender);
   await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
 });
 
 socket.on('ice-candidate', ({ sender, candidate }) => {
-  peerConnection?.addIceCandidate(new RTCIceCandidate(candidate));
+  if (peerConnection) {
+    peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+  }
 });
 
 function createPeerConnection(remoteSocketId) {
